@@ -1,15 +1,3 @@
-"""
-FastAPI backend for the U-Net Text Image Deblurring model.
-
-Run with:
-    uvicorn app:app --host 0.0.0.0 --port 8000 --reload
-
-Endpoints:
-    GET  /health          -> health check
-    POST /deblur           -> upload a blurry image, get back the deblurred image (image/jpeg)
-    POST /deblur/base64    -> upload a blurry image, get back JSON with base64 blurry+deblurred (used by the frontend)
-"""
-
 import io
 import os
 import base64
@@ -23,21 +11,21 @@ from fastapi.responses import StreamingResponse, JSONResponse
 
 from model import load_model
 
-# ------------------------------------------------------------------
 # Config
-# ------------------------------------------------------------------
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 WEIGHTS_PATH = os.path.join(BASE_DIR, "weights", "best.pth")
 IMG_SIZE = 256  # model was trained on 256x256 patches
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-# ------------------------------------------------------------------
+
 # App setup
-# ------------------------------------------------------------------
+
 app = FastAPI(title="Text Deblur API", version="1.0.0")
 
 # Allow the frontend (served from anywhere / file:// / another port) to call this API
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -82,7 +70,7 @@ def run_inference(image_bytes: bytes) -> Image.Image:
     except Exception:
         raise HTTPException(status_code=400, detail="Uploaded file is not a valid image.")
 
-    orig_size = img.size  # (W, H) - so we can resize the result back if desired
+    orig_size = img.size  
 
     tensor = infer_transform(img).unsqueeze(0).to(device)
 
@@ -93,7 +81,6 @@ def run_inference(image_bytes: bytes) -> Image.Image:
     output_img = (output_img * 255).astype("uint8")
     result = Image.fromarray(output_img)
 
-    # Resize result back to original upload dimensions for a nicer UX
     result = result.resize(orig_size, Image.BICUBIC)
     return result
 
@@ -104,9 +91,9 @@ def pil_to_base64(img: Image.Image, fmt: str = "JPEG") -> str:
     return base64.b64encode(buf.getvalue()).decode("utf-8")
 
 
-# ------------------------------------------------------------------
+
 # Routes
-# ------------------------------------------------------------------
+
 @app.get("/health")
 def health():
     return {"status": "ok", "model_loaded": model is not None, "device": str(device)}
