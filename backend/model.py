@@ -1,10 +1,3 @@
-"""
-UNetDeblur model definition.
-This is the exact same architecture used in training (text__1_26_47PSNR notebook).
-DO NOT change this file unless you also retrain the model, otherwise the
-saved weights (best.pth) will fail to load / load incorrectly.
-"""
-
 import torch
 import torch.nn as nn
 
