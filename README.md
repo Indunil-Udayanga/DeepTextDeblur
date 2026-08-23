@@ -11,9 +11,7 @@ A deep learning application that restores blurred text images using a U-Net-base
 - FastAPI REST API
 - React frontend
 - Real-time image upload and prediction
-
 ---
-
 ## Tech Stack
 
 ### AI / Deep Learning
@@ -105,15 +103,4 @@ Display Result
 - Support higher-resolution images
 - Mobile-friendly UI
 - Batch image processing
-- Docker deployment
-- Cloud deployment
-
----
-
-## 👨‍💻 Author
-
-**Indunil Udayanga**
-
-Aspiring AI & Machine Learning Engineer
-
-GitHub: https://github.com/Indunil-Udayanga
+- Docker deploym
